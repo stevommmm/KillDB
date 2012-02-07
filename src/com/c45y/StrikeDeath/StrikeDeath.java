@@ -5,17 +5,18 @@ import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class StrikeDeath extends JavaPlugin {
-	private final HandleDeath HandleDeath = new HandleDeath(this);
-	Logger log = Logger.getLogger("Minecraft");
+public class StrikeDeath extends JavaPlugin
+{
+  private final HandleDeath HandleDeath = new HandleDeath(this);
+  Logger log = Logger.getLogger("Minecraft");
 
-	public void onEnable(){ 
-		PluginManager pm = this.getServer().getPluginManager();
-		pm.registerEvent(Event.Type.ENTITY_DEATH, HandleDeath, Event.Priority.Normal, this);
-		log.info("StrikeDeath enabled.");
-	}
+  public void onEnable() {
+    PluginManager pm = getServer().getPluginManager();
+    pm.registerEvent(Event.Type.ENTITY_DEATH, this.HandleDeath, Event.Priority.Normal, this);
+    this.log.info("StrikeDeath enabled.");
+  }
 
-	public void onDisable(){ 
-		log.info("StrikeDeath disabled.");
-	}
+  public void onDisable() {
+    this.log.info("StrikeDeath disabled.");
+  }
 }
