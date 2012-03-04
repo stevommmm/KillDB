@@ -12,8 +12,7 @@ public class HandleDeath implements Listener
 {
 	public StrikeDeath plugin;
 
-	public HandleDeath(StrikeDeath instance)
-	{
+	public HandleDeath(StrikeDeath instance) {
 		this.plugin = instance;
 	}
 
