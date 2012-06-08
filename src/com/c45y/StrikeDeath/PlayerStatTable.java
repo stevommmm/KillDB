@@ -21,13 +21,18 @@ public class PlayerStatTable {
 		if (retVal == null) {
 			retVal = new PlayerStat();
 			retVal.setPlayerName(player);
+			retVal.setPlayerKills(0);
+			retVal.setPlayerDeaths(0);
 		}
 		return retVal;
 	}
 
 	public void save(PlayerStat stat) {
+		System.out.println(stat.getId() + "\n\t" + stat.getPlayerName() + "\n\t" + stat.getPlayerKills() + "\n\t" + stat.getPlayerDeaths());	
 		try {
 			plugin.getDatabase().save(stat);
-		} catch (Exception e) {System.out.println(e.getMessage());}
+		} catch (Exception e) {System.out.println(e.getMessage() + "\n" + e.toString());}
+		//22:24:37 [INFO] get kills on [com.c45y.StrikeDeath.PlayerStat] type[com.c45y.StrikeDeath.PlayerStat] threw error.
+		//java.lang.RuntimeException: get kills on [com.c45y.StrikeDeath.PlayerStat] type[com.c45y.StrikeDeath.PlayerStat] threw error.
 	}
 }

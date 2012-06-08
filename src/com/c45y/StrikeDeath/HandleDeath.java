@@ -31,23 +31,20 @@ public class HandleDeath implements Listener
 			}
 			//Log death
 			{
-					PlayerStat stat = plugin.stattab.getPlayerStat(player.getName());
-					stat.incrementDeaths();
-					System.out.println(stat.getId() + stat.getPlayerName() + stat.getPlayerKills() + stat.getPlayerDeaths());
-				try {	
-					plugin.stattab.save(stat);
-					System.out.println("death saved");
-				} catch (Exception e) { System.out.println(e.toString() + "\n" + e.getMessage());}
+				PlayerStat stat = plugin.stattab.getPlayerStat(player.getName());
+				stat.incrementDeaths();
+				plugin.stattab.save(stat);
+				System.out.println("death saved");
 			}
 			//Log kill
-//			{
-//				try {
-//					PlayerStat stat = plugin.stattab.getPlayerStat(player.getKiller().getName());
-//					stat.incrementKills();
-//					plugin.stattab.save(stat);
-//					System.out.println("kill saved");
-//				} catch (Exception e) { System.out.println(":("); }
-//			}
+			//			{
+			//				try {
+			//					PlayerStat stat = plugin.stattab.getPlayerStat(player.getKiller().getName());
+			//					stat.incrementKills();
+			//					plugin.stattab.save(stat);
+			//					System.out.println("kill saved");
+			//				} catch (Exception e) { System.out.println(":("); }
+			//			}
 		}
 	}
 

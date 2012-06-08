@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.avaje.ebean.validation.NotNull;
+
 @Entity()
 @Table(name = "death_stats")
 public class PlayerStat {
@@ -12,10 +14,10 @@ public class PlayerStat {
 	@Id
 	private int id;
 	
-	@Column
-	private String playerName = null;
-	private int kills = 0;
-	private int deaths = 0;
+	@Column @NotNull
+	private String playerName;
+	private int kills;
+	private int deaths;
 	
 	public void setId(int id) {
 		this.id = id;
