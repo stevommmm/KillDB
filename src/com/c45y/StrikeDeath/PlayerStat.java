@@ -1,17 +1,21 @@
 package com.c45y.StrikeDeath;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity()
+@Table(name = "death_stats")
 public class PlayerStat {
 	
 	@Id
 	private int id;
 	
 	@Column
-	private String playerName;
-	private int kills;
-	private int deaths;
+	private String playerName = null;
+	private int kills = 0;
+	private int deaths = 0;
 	
 	public void setId(int id) {
 		this.id = id;

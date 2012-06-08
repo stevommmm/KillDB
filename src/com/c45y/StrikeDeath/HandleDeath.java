@@ -23,26 +23,31 @@ public class HandleDeath implements Listener
 		if ((player.getKiller() instanceof Player)) {
 			event.setDeathMessage(""); //We want do do our own messages
 			if (isArmorKill(player)) { //If they gave up spawn camping
-				//Log death
-				{
-					PlayerStat stat = plugin.stattab.getPlayerStat(player.getName());
-					stat.incrementDeaths();
-					plugin.stattab.save(stat);
-					System.out.println("death saved");
-				}
-				//Log kill
-				{
-					PlayerStat stat = plugin.stattab.getPlayerStat(player.getKiller().getName());
-					stat.incrementKills();
-					plugin.stattab.save(stat);
-					System.out.println("kill saved");
-				}
 				Location loc = new Location(player.getLocation().getWorld(), player.getLocation().getX(), player.getLocation().getY() + 5.0D, player.getLocation().getZ(), 360.0F, 0.0F);
 				event.getEntity().getWorld().strikeLightningEffect(loc);
 				deathMessage(player.getKiller().getName(), " took down ", player.getName(), " with a ", prettyItemName(player.getKiller().getItemInHand()));
 			} else {
 				deathMessage(player.getKiller().getName(), " killed ", player.getName(), " with a ", prettyItemName(player.getKiller().getItemInHand()));
 			}
+			//Log death
+			{
+					PlayerStat stat = plugin.stattab.getPlayerStat(player.getName());
+					stat.incrementDeaths();
+					System.out.println(stat.getId() + stat.getPlayerName() + stat.getPlayerKills() + stat.getPlayerDeaths());
+				try {	
+					plugin.stattab.save(stat);
+					System.out.println("death saved");
+				} catch (Exception e) { System.out.println(e.toString() + "\n" + e.getMessage());}
+			}
+			//Log kill
+//			{
+//				try {
+//					PlayerStat stat = plugin.stattab.getPlayerStat(player.getKiller().getName());
+//					stat.incrementKills();
+//					plugin.stattab.save(stat);
+//					System.out.println("kill saved");
+//				} catch (Exception e) { System.out.println(":("); }
+//			}
 		}
 	}
 

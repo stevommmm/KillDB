@@ -31,7 +31,7 @@ public class StrikeDeath extends JavaPlugin
 
 	public boolean setupDatabase() {
 		try {
-			getDatabase().find(PlayerStatTable.class).findRowCount();
+			getDatabase().find(PlayerStat.class).findRowCount();
 		} catch (PersistenceException ex) {
 			getLogger().log(Level.INFO, "First run, initializing database.");
 			installDDL();
