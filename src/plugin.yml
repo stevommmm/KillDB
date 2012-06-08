@@ -1,3 +1,4 @@
 name: StrikeDeath
 main: com.c45y.StrikeDeath.StrikeDeath
 version: 0.3
+database: true
