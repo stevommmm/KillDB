@@ -1,5 +1,8 @@
 package com.c45y.StrikeDeath;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -29,25 +32,40 @@ public class HandleDeath implements Listener
 			} else {
 				deathMessage(player.getKiller().getName(), " killed ", player.getName(), " with a ", prettyItemName(player.getKiller().getItemInHand()));
 			}
-			if(plugin.setupDatabase()) {
-				//Log death
-				{
-					PlayerStat stat = plugin.getPlayerStat(player.getName());
-					stat.incrementDeaths();
-					plugin.save(stat);
-					System.out.println("death saved");
-				}
-				//Log kill
-				//			{
-				//				try {
-				//					PlayerStat stat = plugin.stattab.getPlayerStat(player.getKiller().getName());
-				//					stat.incrementKills();
-				//					plugin.stattab.save(stat);
-				//					System.out.println("kill saved");
-				//				} catch (Exception e) { System.out.println(":("); }
-				//			}
-			}
+			incrementDeath(player.getName());
+			//Log death
+			
+			//Log kill
+			//			{
+			//				try {
+			//					PlayerStat stat = plugin.stattab.getPlayerStat(player.getKiller().getName());
+			//					stat.incrementKills();
+			//					plugin.stattab.save(stat);
+			//					System.out.println("kill saved");
+			//				} catch (Exception e) { System.out.println(":("); }
+			//			}
 		}
+	}
+	
+	public void incrementDeath(String player) {
+		try {
+			String query = "SELECT deaths FROM player_stats WHERE playerName = '" + player + "' ;";
+			ResultSet result = 	this.plugin.sqlite.query(query);
+			if (result != null && result.next()) {
+				int deaths = result.getInt("deaths");
+				query = "UPDATE player_stats SET deaths = '" + (deaths + 1) + "' WHERE playerName = '" + player + "';";
+				result.close();
+				this.plugin.sqlite.query(query);
+				System.out.println("Updated");
+			} else {
+				query = "INSERT INTO player_stats (playerName,kills,deaths) VALUES ('" + player + "','" + 0 + "', '" + 1 + "');";
+				this.plugin.sqlite.query(query);
+			}
+		} catch (SQLException e) {
+			System.out.println("----------------------------------");
+			e.printStackTrace();
+		}
+		System.out.println("death saved");
 	}
 
 	public boolean isArmorKill(Player dead_guy) {
