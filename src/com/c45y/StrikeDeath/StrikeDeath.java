@@ -5,22 +5,23 @@ import java.util.logging.Logger;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import lib.PatPeter.SQLibrary.*;
+import java.util.ArrayList;
+import java.util.logging.Level;
+
+import javax.persistence.PersistenceException;
+
+import com.c45y.StrikeDeath.database.DeathStat;
+import com.c45y.StrikeDeath.database.DeathStatTable;
 
 public class StrikeDeath extends JavaPlugin
 {
 	private final HandleDeath HandleDeath = new HandleDeath(this);
 	Logger log = Logger.getLogger("Minecraft");
-	public SQLite sqlite;
+	DeathStatTable deathStatTable;
 
 	public void onEnable() {
-		this.sqlite = new SQLite(this.log, "[StrikeDeath]", "StrikeDeath", this.getDataFolder().getPath());
-		this.sqlite.open();
-		if (!this.sqlite.checkTable("player_stats")) {
-			this.log.info("Creating table player_stats");
-			String query = "CREATE TABLE IF NOT EXISTS player_stats (playerName VARCHAR(25) PRIMARY KEY NOT NULL, kills INT, deaths INT);";
-			this.sqlite.createTable(query); // Use SQLite.createTable(query) to create tables
-			}
+		setupDatabase();
+		deathStatTable = new DeathStatTable(this);
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(HandleDeath, this);
 		this.log.info("StrikeDeath enabled.");
@@ -29,4 +30,23 @@ public class StrikeDeath extends JavaPlugin
 	public void onDisable() {
 		this.log.info("StrikeDeath disabled.");
 	}
+	
+	public boolean setupDatabase() {
+        try {
+            getDatabase().find(DeathStat.class).findRowCount();
+        } catch (PersistenceException ex) {
+            getLogger().log(Level.INFO, "First run, initializing database.");
+            installDDL();
+            return true;
+        }
+        
+        return false;
+    }
+	
+	@Override
+    public ArrayList<Class<?>> getDatabaseClasses() {
+        ArrayList<Class<?>> list = new ArrayList<Class<?>>();
+        list.add(DeathStat.class);
+        return list;
+    }
 }

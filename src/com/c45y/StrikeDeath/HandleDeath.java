@@ -1,8 +1,5 @@
 package com.c45y.StrikeDeath;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -12,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+
+import com.c45y.StrikeDeath.database.DeathStat;
 
 public class HandleDeath implements Listener
 {
@@ -33,125 +32,25 @@ public class HandleDeath implements Listener
 			} else {
 				deathMessage(player.getKiller().getName(), " killed ", player.getName(), " with a ", prettyItemName(player.getKiller().getItemInHand()));
 			}
-			incrementKills(player.getKiller().getName());
-			incrementDeaths(player.getName());
+			
+			DeathStat stat = new DeathStat();
+			stat.setPlayerName(player.getName());
+			stat.setKillerName(player.getKiller().getName());
+			stat.setKillerItem(player.getKiller().getItemInHand().getType().toString());
+            String location = String.format("%s,%f,%f,%f", player.getWorld().getName(), player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
+            stat.setDeathLocation(location);
+            boolean is_armor_kill = isArmorKill(player);
+            stat.setArmorKill(is_armor_kill);
+
+            plugin.deathStatTable.save(stat);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onPlayerJoin(PlayerJoinEvent event){
-		String player = event.getPlayer().getName();
-		if(!userExists(player)) {
-			createDbUser(player);
-			System.out.println("User created.");
-		}
-
-	}
-
-	public void createDbUser(String player) {
-		String query = "INSERT INTO player_stats (playerName,kills,deaths) VALUES ('" + player + "','0', '0');";
-		ResultSet result = this.plugin.sqlite.query(query);
-		try {
-			result.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Created db player: " + player);
-	}
-
-	public boolean userExists(String player) {
-		String query = "SELECT count(*) AS count FROM player_stats WHERE playerName = '" + player + "' ;";
-		ResultSet result = 	this.plugin.sqlite.query(query);
-		boolean returnval = false;
-		try {
-			if (result != null && result.next()) {
-				if(result.getInt("count") == 1) {
-					returnval = true;
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
-			result.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return returnval;
-	}
-
-	public int getKills(String player) {
-		String query = "SELECT kills FROM player_stats WHERE playerName = '" + player + "' ;";
-		int kills = 0;
-		ResultSet result = this.plugin.sqlite.query(query);
-		try {
-			if (result != null && result.next()) {
-				kills = result.getInt("kills");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
-			result.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(player + " has " + kills + " kills");
-		return kills;
-	}
-
-	public void incrementKills(String player) {
-		incrementKills(player,getKills(player));
-	}
-
-	public void incrementKills(String player,int kills){
-		String query = "UPDATE player_stats SET kills = '" + (kills + 1) + "' WHERE playerName = '" + player + "';";
-		try {
-			this.plugin.sqlite.getConnection().createStatement().executeUpdate(query);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("kills set to " + kills+ " for " + player);
-	}
-	
-	public int getDeaths(String player) {
-		String query = "SELECT deaths FROM player_stats WHERE playerName = '" + player + "' ;";
-		int deaths = 0;
-		ResultSet result = this.plugin.sqlite.query(query);
-		try {
-			if (result != null && result.next()) {
-				deaths = result.getInt("deaths");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
-			result.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(player + " has " + deaths + " deaths");
-		return deaths;
-	}
-
-	public void incrementDeaths(String player) {
-		incrementDeaths(player,getDeaths(player));
-	}
-
-	public void incrementDeaths(String player,int deaths){
-		String query = "UPDATE player_stats SET deaths = '" + (deaths + 1) + "' WHERE playerName = '" + player + "';";
-		try {
-			this.plugin.sqlite.getConnection().createStatement().executeUpdate(query);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("deaths set to " + deaths + " for " + player);
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		int deaths = plugin.deathStatTable.getNumDeaths(ChatColor.stripColor(event.getPlayer().getName()));
+		int kills = plugin.deathStatTable.getNumKills(ChatColor.stripColor(event.getPlayer().getName()));
+		event.getPlayer().sendMessage("Deaths: " + deaths + " Kills: " + kills);
 	}
 
 	public boolean isArmorKill(Player dead_guy) {
