@@ -15,7 +15,7 @@ import com.c45y.StrikeDeath.database.DeathStatTable;
 
 public class StrikeDeath extends JavaPlugin
 {
-	private final HandleDeath HandleDeath = new HandleDeath(this);
+	public final HandleDeath HandleDeath = new HandleDeath(this);
 	Logger log = Logger.getLogger("Minecraft");
 	DeathStatTable deathStatTable;
 
