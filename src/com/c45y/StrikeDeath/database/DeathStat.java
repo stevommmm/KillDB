@@ -21,6 +21,7 @@ public class DeathStat {
 	
 	@NotNull
 	private boolean armorKill;
+	private long timestamp;
 	
 	public void setId(int id) {
 		this.id = id;
@@ -68,5 +69,13 @@ public class DeathStat {
 	
 	public boolean getArmorKill() {
 		return this.armorKill;
+	}
+
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 }

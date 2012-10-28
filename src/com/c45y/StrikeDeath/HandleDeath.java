@@ -41,6 +41,7 @@ public class HandleDeath implements Listener
             stat.setDeathLocation(location);
             boolean is_armor_kill = isArmorKill(player);
             stat.setArmorKill(is_armor_kill);
+            stat.setTimestamp(System.currentTimeMillis());
 
             plugin.deathStatTable.save(stat);
 		}
