@@ -32,7 +32,7 @@ public class HandleDeath implements Listener
 				deathMessage(player.getKiller().getName(), " killed ", player.getName(), " with a ", prettyItemName(player.getKiller().getItemInHand()));
 			}
 			DataRunnable dr = new DataRunnable(this.plugin, player, player.getKiller());
-			dr.run();
+			dr.start();
 
 		}
 	}
