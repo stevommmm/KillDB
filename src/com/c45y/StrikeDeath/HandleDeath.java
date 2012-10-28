@@ -10,7 +10,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.c45y.StrikeDeath.database.DeathStat;
 
 public class HandleDeath implements Listener
 {
@@ -32,18 +31,9 @@ public class HandleDeath implements Listener
 			} else {
 				deathMessage(player.getKiller().getName(), " killed ", player.getName(), " with a ", prettyItemName(player.getKiller().getItemInHand()));
 			}
-			
-			DeathStat stat = new DeathStat();
-			stat.setPlayerName(player.getName());
-			stat.setKillerName(player.getKiller().getName());
-			stat.setKillerItem(player.getKiller().getItemInHand().getType().toString());
-            String location = String.format("%s,%f,%f,%f", player.getWorld().getName(), player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
-            stat.setDeathLocation(location);
-            boolean is_armor_kill = isArmorKill(player);
-            stat.setArmorKill(is_armor_kill);
-            stat.setTimestamp(System.currentTimeMillis());
+			DataRunnable dr = new DataRunnable(this.plugin, player, player.getKiller());
+			dr.run();
 
-            plugin.deathStatTable.save(stat);
 		}
 	}
 
@@ -51,7 +41,7 @@ public class HandleDeath implements Listener
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		int deaths = plugin.deathStatTable.getNumDeaths(ChatColor.stripColor(event.getPlayer().getName()));
 		int kills = plugin.deathStatTable.getNumKills(ChatColor.stripColor(event.getPlayer().getName()));
-		event.getPlayer().sendMessage("Deaths: " + deaths + " Kills: " + kills);
+		plugin.getLogger().info(event.getPlayer().getName() + " + K:D - Deaths: " + deaths + " Kills: " + kills);
 	}
 
 	public boolean isArmorKill(Player dead_guy) {
