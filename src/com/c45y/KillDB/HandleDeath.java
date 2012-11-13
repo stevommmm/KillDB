@@ -1,4 +1,4 @@
-package com.c45y.StrikeDeath;
+package com.c45y.KillDB;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -13,9 +13,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class HandleDeath implements Listener
 {
-	public StrikeDeath plugin;
+	public KillDB plugin;
 
-	public HandleDeath(StrikeDeath instance) {
+	public HandleDeath(KillDB instance) {
 		this.plugin = instance;
 	}
 
@@ -24,7 +24,7 @@ public class HandleDeath implements Listener
 		Player player = (Player)event.getEntity();
 		if ((player.getKiller() instanceof Player)) {
 			event.setDeathMessage(""); //We want do do our own messages
-			if (isArmorKill(player)) { //If they gave up spawn camping
+			if (isArmorKill(player.getKiller(), player)) { //If they gave up spawn camping
 				Location loc = new Location(player.getLocation().getWorld(), player.getLocation().getX(), player.getLocation().getY() + 5.0D, player.getLocation().getZ(), 360.0F, 0.0F);
 				event.getEntity().getWorld().strikeLightningEffect(loc);
 				deathMessage(player.getKiller().getName(), " took down ", player.getName(), " with a ", prettyItemName(player.getKiller().getItemInHand()));
@@ -44,9 +44,9 @@ public class HandleDeath implements Listener
 		plugin.getLogger().info(event.getPlayer().getName() + " + K:D - Deaths: " + deaths + " Kills: " + kills);
 	}
 
-	public boolean isArmorKill(Player dead_guy) {
-		if (dead_guy.getInventory().getChestplate() != null) {
-			if (dead_guy.getInventory().getChestplate().getType().getMaxDurability() > 150) { //was wearing iron or dia armor
+	public boolean isArmorKill(Player attacker, Player dead_guy) {
+		if (dead_guy.getInventory().getChestplate() != null && attacker.getInventory().getChestplate() != null) {
+			if (dead_guy.getInventory().getChestplate().getType().getMaxDurability() > 150 && attacker.getInventory().getChestplate().getType().getMaxDurability() > 150) { //was wearing iron or dia armor
 				return true;
 			}
 		}

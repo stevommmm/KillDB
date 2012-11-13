@@ -1,4 +1,4 @@
-package com.c45y.StrikeDeath.database;
+package com.c45y.KillDB.database;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

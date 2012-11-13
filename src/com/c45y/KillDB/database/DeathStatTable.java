@@ -1,13 +1,13 @@
-package com.c45y.StrikeDeath.database;
+package com.c45y.KillDB.database;
 
 import com.avaje.ebean.Query;
-import com.c45y.StrikeDeath.StrikeDeath;
+import com.c45y.KillDB.KillDB;
 
 public class DeathStatTable {
 
-	StrikeDeath plugin;
+	KillDB plugin;
 	
-	public DeathStatTable(StrikeDeath plugin) {
+	public DeathStatTable(KillDB plugin) {
 		this.plugin = plugin;
 	}
 	

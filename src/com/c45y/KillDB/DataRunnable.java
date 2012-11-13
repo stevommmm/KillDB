@@ -1,16 +1,16 @@
-package com.c45y.StrikeDeath;
+package com.c45y.KillDB;
 
 import org.bukkit.entity.Player;
 
-import com.c45y.StrikeDeath.database.DeathStat;
+import com.c45y.KillDB.database.DeathStat;
 
 class DataRunnable extends Thread
 {
-	StrikeDeath plugin = null;
+	KillDB plugin = null;
 	Player player = null;
 	Player killer = null;
 	
-	DataRunnable(StrikeDeath p, Player pl, Player kl) {
+	DataRunnable(KillDB p, Player pl, Player kl) {
 		this.plugin = p;
 		this.player = pl;
 		this.killer = kl;

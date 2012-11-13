@@ -1,4 +1,4 @@
-package com.c45y.StrikeDeath;
+package com.c45y.KillDB;
 
 import java.util.logging.Logger;
 
@@ -10,10 +10,10 @@ import java.util.logging.Level;
 
 import javax.persistence.PersistenceException;
 
-import com.c45y.StrikeDeath.database.DeathStat;
-import com.c45y.StrikeDeath.database.DeathStatTable;
+import com.c45y.KillDB.database.DeathStat;
+import com.c45y.KillDB.database.DeathStatTable;
 
-public class StrikeDeath extends JavaPlugin
+public class KillDB extends JavaPlugin
 {
 	public final HandleDeath HandleDeath = new HandleDeath(this);
 	Logger log = Logger.getLogger("Minecraft");
@@ -24,11 +24,6 @@ public class StrikeDeath extends JavaPlugin
 		deathStatTable = new DeathStatTable(this);
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(HandleDeath, this);
-		this.log.info("StrikeDeath enabled.");
-	}
-
-	public void onDisable() {
-		this.log.info("StrikeDeath disabled.");
 	}
 	
 	public boolean setupDatabase() {
