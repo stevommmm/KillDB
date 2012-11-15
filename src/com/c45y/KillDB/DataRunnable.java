@@ -23,7 +23,7 @@ class DataRunnable extends Thread
 		stat.setKillerItem(this.killer.getItemInHand().getType().toString());
         String location = String.format("%s,%f,%f,%f", player.getWorld().getName(), player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
         stat.setDeathLocation(location);
-        boolean is_armor_kill = plugin.HandleDeath.isArmorKill(player);
+        boolean is_armor_kill = plugin.HandleDeath.isArmorKill(killer, player);
         stat.setArmorKill(is_armor_kill);
         stat.setTimestamp(System.currentTimeMillis());
         this.plugin.deathStatTable.save(stat);

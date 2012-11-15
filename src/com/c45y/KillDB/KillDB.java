@@ -18,6 +18,7 @@ public class KillDB extends JavaPlugin
 	public final HandleDeath HandleDeath = new HandleDeath(this);
 	Logger log = Logger.getLogger("Minecraft");
 	DeathStatTable deathStatTable;
+	public boolean logDeathItems = false;
 
 	public void onEnable() {
 		setupDatabase();
