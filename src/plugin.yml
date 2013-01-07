@@ -1,4 +1,4 @@
 name: StrikeDeath
-main: com.c45y.StrikeDeath.StrikeDeath
+main: com.c45y.KillDB.KillDB
 version: 0.3
 database: true
